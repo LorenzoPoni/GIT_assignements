@@ -68,15 +68,6 @@ class Brano:
         self._durata = nuova
         return self._durata
 
-
-if __name__ == "__main__":
-    newBrano = Brano("Gue", "Scooteroni", 180)
-    print(newBrano)
-    # esempio di taglio
-    newBrano.taglia_durata(30)
-    print("Dopo taglio:", newBrano)
-
-
 class CD:
     def __init__(self, titolo: str, autore: str ):
         self.titolo = titolo
@@ -100,3 +91,109 @@ class CD:
 
     def __str__(self):
         return f"CD: {self.titolo} - {self.autore}, Durata totale: {self.durata_totale()}s"
+
+def leggi_testo(messaggio):
+    """Chiede un testo non vuoto finché l'utente non lo inserisce."""
+    while True:
+        valore = input(messaggio).strip()
+        if valore:
+            return valore
+        print("Il campo non può essere vuoto.")
+ 
+ 
+def leggi_intero(messaggio, minimo):
+    """Chiede un intero >= minimo finché l'utente non lo inserisce."""
+    while True:
+        try:
+            valore = int(input(messaggio))
+        except ValueError:
+            print("Inserisci un numero intero.")
+            continue
+        if valore < minimo:
+            print(f"Il valore deve essere almeno {minimo}.")
+            continue
+        return valore
+ 
+ 
+def mostra_menu():
+    print()
+    print("=== GESTIONE CD ===")
+    print("1) Aggiungi brano")
+    print("2) Mostra brani")
+    print("3) Durata totale")
+    print("4) Taglia la durata di un brano")
+    print("5) Mostra CD")
+    print("0) Esci")
+ 
+ 
+def aggiungi_brano(cd):
+    titolo = leggi_testo("Titolo del brano: ")
+    autore = leggi_testo("Autore del brano: ")
+    durata = leggi_intero("Durata in secondi: ", 1)
+    brano = Brano(autore, titolo, durata)
+    cd.aggiungi_brano(brano)
+    print(f"Aggiunto: {brano}")
+ 
+ 
+def mostra_brani(cd):
+    if not cd.brani:
+        print("Il CD non contiene ancora brani.")
+        return
+    for numero, brano in enumerate(cd.brani, start=1):
+        print(f"  {numero}) {brano}")
+ 
+ 
+def durata_totale(cd):
+    totale = cd.durata_totale()
+    minuti, secondi = divmod(totale, 60)
+    print(f"Durata totale: {totale}s ({minuti}:{secondi:02d})")
+ 
+ 
+def taglia_brano(cd):
+    if not cd.brani:
+        print("Il CD non contiene ancora brani.")
+        return
+    mostra_brani(cd)
+    numero = leggi_intero("Numero del brano da tagliare: ", 1)
+    if numero > len(cd.brani):
+        print("Numero di brano non valido.")
+        return
+    secondi = leggi_intero("Secondi da tagliare: ", 0)
+    brano = cd.brani[numero - 1]
+    brano.taglia_durata(secondi)
+    print(f"Aggiornato: {brano}")
+ 
+ 
+def mostra_cd(cd):
+    print(cd)
+ 
+ 
+def main():
+    print("=== CREAZIONE CD ===")
+    titolo = leggi_testo("Titolo del CD: ")
+    autore = leggi_testo("Autore del CD: ")
+    cd = CD(titolo, autore)
+ 
+    azioni = {
+        "1": aggiungi_brano,
+        "2": mostra_brani,
+        "3": durata_totale,
+        "4": taglia_brano,
+        "5": mostra_cd,
+    }
+ 
+    while True:
+        mostra_menu()
+        scelta = input("Scelta: ").strip()
+        if scelta == "0":
+            print("Arrivederci!")
+            break
+        azione = azioni.get(scelta)
+        if azione is None:
+            print("Scelta non valida, riprova.")
+        else:
+            azione(cd)
+ 
+ 
+if __name__ == "__main__":
+    main()
