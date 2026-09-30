@@ -75,3 +75,28 @@ if __name__ == "__main__":
     # esempio di taglio
     newBrano.taglia_durata(30)
     print("Dopo taglio:", newBrano)
+
+
+class CD:
+    def __init__(self, titolo: str, autore: str ):
+        self.titolo = titolo
+        self.autore = autore
+        self.brani = []
+
+    @property
+    def titolo(self) -> str:
+        return self._titolo
+    @property
+    def autore(self) -> str:
+        return self._autore
+        
+    def aggiungi_brano(self, brano: Brano):
+        if not isinstance(brano, Brano):
+            raise TypeError("brano deve essere un'istanza di Brano")
+        self.brani.append(brano)
+
+    def durata_totale(self) -> int:
+        return sum(brano.durata for brano in self.brani)
+
+    def __str__(self):
+        return f"CD: {self.titolo} - {self.autore}, Durata totale: {self.durata_totale()}s"
