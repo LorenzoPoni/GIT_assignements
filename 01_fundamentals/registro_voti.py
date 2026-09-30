@@ -16,3 +16,13 @@ class RegistroVoti:
         if not voti:
             return None
         return sum(voto for _, voto in voti) / len(voti)
+
+    def statistiche(self):
+        stats = {}
+        for studente, voti in self.voti.items():
+            media = self.media(studente)
+            stats[studente] = {
+                "numero_voti": len(voti),
+                "media": media
+            }
+        return stat
