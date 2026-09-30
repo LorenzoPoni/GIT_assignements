@@ -25,4 +25,4 @@ class RegistroVoti:
                 "numero_voti": len(voti),
                 "media": media
             }
-        return stat
+        return stats
